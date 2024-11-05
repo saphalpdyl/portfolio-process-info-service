@@ -12,14 +12,23 @@ namespace _02_PingProcessInformationToWebsiteService
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
-        static void Main()
+        static void Main(string[] args)
         {
-            ServiceBase[] ServicesToRun;
-            ServicesToRun = new ServiceBase[]
+            if ( Environment.UserInteractive )
             {
-                new BaseService()
-            };
-            ServiceBase.Run(ServicesToRun);
+                BaseService service = new BaseService();
+                service.TestForDevelopment(args);
+
+            } else
+            {
+                ServiceBase[] ServicesToRun;
+                ServicesToRun = new ServiceBase[]
+                {
+                    new BaseService()
+                };
+                ServiceBase.Run(ServicesToRun);
+
+            }
         }
     }
 }
