@@ -8,6 +8,7 @@ using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.ServiceProcess;
 using System.Text;
 using System.Text.Json;
@@ -20,11 +21,13 @@ namespace _02_PingProcessInformationToWebsiteService
         Timer Timer = new Timer();
 
         private const string SERVICE_FOLDER = "saphalpdyl_portfolio";
-        private const string DEFAULT_TARGET_URL = "https://saphalpdyl.com/";
+        private const string DEFAULT_TARGET_URL = "https://saphalpdyl.com";
         private const int DEFAULT_INTERVAL = 1000;
 
         private Configuration Configuration;
         private ProcessMonitor Monitor;
+        private HttpClient HttpClient;
+        private WebhookServer server;
         
         public BaseService()
         {
@@ -104,20 +107,27 @@ namespace _02_PingProcessInformationToWebsiteService
 
             Monitor = new ProcessMonitor(this.Configuration.ProcessTargets);
 
-            Timer.Elapsed += new ElapsedEventHandler(onTick);
+            HttpClient = new HttpClient
+            {
+                BaseAddress = new Uri(this.Configuration.TargetURL),
+            };
+            server = new WebhookServer(HttpClient, this.Configuration.TargetURL, "/api/refreshProcessInformation");
+
+            Timer.Elapsed += new ElapsedEventHandler(OnTick);
             Timer.Interval += this.Configuration.TickInterval;
             Timer.Enabled = true;
         }
 
-        private void onTick(object source, ElapsedEventArgs e)
+        private void OnTick(object source, ElapsedEventArgs e)
         {
             // Handle the process information getting logic
             ProcessTargetData[] processInformation = Monitor.GetProcessInformation();
-
+            server.SendProcessInformationToServer(processInformation, this.Configuration.AuthorizationSecret);
         }
 
         protected override void OnStop()
         {
+            
         }
     }
 }
