@@ -89,14 +89,22 @@ namespace _02_PingProcessInformationToWebsiteService
 
                     File.WriteAllText(configFilePath, configurationJsonString);
                     Console.WriteLine("Created a new configuration");
+
+                    new ServiceController().Stop(); // Stop the service
                 } else
                 {
                     string configurationFileValue = File.ReadAllText(configFilePath);
                     this.Configuration = JsonSerializer.Deserialize<Configuration>(configurationFileValue);
+
+                    if (this.Configuration.AuthorizationSecret == "")
+                    {
+                        throw new Exception("[Config.Missing] Authorization secret is missing");
+                    }
                 }
             } catch (Exception ex)
             {
                 ErrorLogger.GetInstance().LogEvent($"{ex.Message}\n{ex.StackTrace}");
+                new ServiceController().Stop(); // Stop the service
             }
         }
 
