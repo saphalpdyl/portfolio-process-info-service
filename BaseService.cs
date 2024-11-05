@@ -32,7 +32,7 @@ namespace _02_PingProcessInformationToWebsiteService
             OnStop();
         }
 
-        private async void InitializeServiceFoldersAndLogger()
+        private void InitializeServiceFoldersAndLogger()
         {
             string programFilesPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             string serviceFolderPath = Path.Combine(programFilesPath, SERVICE_FOLDER);
@@ -49,10 +49,10 @@ namespace _02_PingProcessInformationToWebsiteService
             if (!Directory.Exists(errorFolderPath))
                 Directory.CreateDirectory(errorFolderPath);
 
-            Logger.SetupLogger(errorFolderPath);
+            ErrorLogger.SetupLogger(errorFolderPath);
         }
 
-        private async void InitializeConfiguration()
+        private void InitializeConfiguration()
         {
             try
             {
@@ -86,7 +86,7 @@ namespace _02_PingProcessInformationToWebsiteService
                 }
             } catch (Exception ex)
             {
-                Logger.GetInstance().LogEvent($"{ex.Message}\n{ex.StackTrace}");
+                ErrorLogger.GetInstance().LogEvent($"{ex.Message}\n{ex.StackTrace}");
             }
         }
 

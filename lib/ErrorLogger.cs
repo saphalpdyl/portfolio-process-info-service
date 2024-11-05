@@ -7,18 +7,18 @@ using System.Threading.Tasks;
 
 namespace _02_PingProcessInformationToWebsiteService.lib
 {
-    internal class Logger
+    internal class ErrorLogger
     {
-        private static readonly Logger _instance = new Logger();
+        private static readonly ErrorLogger _instance = new ErrorLogger();
         private static bool _isConfiguredLogger = false;
 
         private string _logFolderPath;
 
-        private Logger() { }
+        private ErrorLogger() { }
 
-        public static Logger GetInstance() { return _instance; }
+        public static ErrorLogger GetInstance() { return _instance; }
 
-        public static Logger SetupLogger(string logFolderPath)
+        public static ErrorLogger SetupLogger(string logFolderPath)
         {
             if (_isConfiguredLogger)
             {
@@ -27,7 +27,7 @@ namespace _02_PingProcessInformationToWebsiteService.lib
 
             _isConfiguredLogger = true;
             _instance._logFolderPath = logFolderPath;
-            return Logger.GetInstance();
+            return ErrorLogger.GetInstance();
         }
 
         public bool LogEvent(string data)
