@@ -56,8 +56,6 @@ namespace _02_PingProcessInformationToWebsiteService
         {
             try
             {
-                throw new Exception("Helllo there this is test");
-
                 string programFilesPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
                 string serviceFolderPath = Path.Combine(programFilesPath, SERVICE_FOLDER);
                 string configFolderPath = Path.Combine(serviceFolderPath, "config");
