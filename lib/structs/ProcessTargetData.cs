@@ -11,10 +11,10 @@ namespace _02_PingProcessInformationToWebsiteService.lib.structs
     {
 
         [JsonPropertyName("appName")]
-        public string appName {  get; set; }
+        public string ApplicationName {  get; set; }
 
         [JsonPropertyName("isRunning")]
-        public bool isRunning {  get; set; }
+        public bool IsRunning {  get; set; }
 
     }
 }
