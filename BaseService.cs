@@ -32,19 +32,35 @@ namespace _02_PingProcessInformationToWebsiteService
             OnStop();
         }
 
+        private async void InitializeServiceFoldersAndLogger()
+        {
+            string programFilesPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string serviceFolderPath = Path.Combine(programFilesPath, SERVICE_FOLDER);
+
+            string configFolderPath = Path.Combine(serviceFolderPath, "config");
+            string errorFolderPath = Path.Combine(serviceFolderPath, "errors");
+
+            if (!Directory.Exists(serviceFolderPath))
+                Directory.CreateDirectory(serviceFolderPath);
+
+            if (!Directory.Exists(configFolderPath))
+                Directory.CreateDirectory(configFolderPath);
+
+            if (!Directory.Exists(errorFolderPath))
+                Directory.CreateDirectory(errorFolderPath);
+
+            Logger.SetupLogger(errorFolderPath);
+        }
+
         private async void InitializeConfiguration()
         {
             try
             {
+                throw new Exception("Helllo there this is test");
+
                 string programFilesPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
                 string serviceFolderPath = Path.Combine(programFilesPath, SERVICE_FOLDER);
                 string configFolderPath = Path.Combine(serviceFolderPath, "config");
-
-                if ( !Directory.Exists(serviceFolderPath) )
-                    Directory.CreateDirectory(serviceFolderPath);
-
-                if ( !Directory.Exists(configFolderPath) )
-                    Directory.CreateDirectory(configFolderPath);
 
                 string configFilePath = Path.Combine(configFolderPath, "service.config.json");
                 if ( !File.Exists(configFilePath) )
@@ -69,16 +85,16 @@ namespace _02_PingProcessInformationToWebsiteService
                 {
                     string configurationFileValue = File.ReadAllText(configFilePath);
                     this.Configuration = JsonSerializer.Deserialize<Configuration>(configurationFileValue);
-                    Console.WriteLine(configurationFileValue);
                 }
             } catch (Exception ex)
             {
-
+                Logger.GetInstance().LogEvent($"{ex.Message}\n{ex.StackTrace}");
             }
         }
 
         protected override void OnStart(string[] args)
         {
+            InitializeServiceFoldersAndLogger();
             InitializeConfiguration();
         }
 
