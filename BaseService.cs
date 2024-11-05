@@ -90,7 +90,7 @@ namespace _02_PingProcessInformationToWebsiteService
                     File.WriteAllText(configFilePath, configurationJsonString);
                     Console.WriteLine("Created a new configuration");
 
-                    new ServiceController().Stop(); // Stop the service
+                    throw new Exception("[Config.first] Service shutdown because configuration is missing from being created just now.");
                 } else
                 {
                     string configurationFileValue = File.ReadAllText(configFilePath);
@@ -104,7 +104,7 @@ namespace _02_PingProcessInformationToWebsiteService
             } catch (Exception ex)
             {
                 ErrorLogger.GetInstance().LogEvent($"{ex.Message}\n{ex.StackTrace}");
-                new ServiceController().Stop(); // Stop the service
+                this.Stop();
             }
         }
 
