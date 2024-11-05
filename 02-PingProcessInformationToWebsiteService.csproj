@@ -77,10 +77,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="lib\services\ProcessMonitor.cs" />
     <Compile Include="lib\structs\Configuration.cs" />
     <Compile Include="lib\ErrorLogger.cs" />
     <Compile Include="lib\structs\ProcessTarget.cs" />
-    <Compile Include="lib\WebhookServer.cs" />
+    <Compile Include="lib\structs\ProcessTargetData.cs" />
+    <Compile Include="lib\services\WebhookServer.cs" />
     <Compile Include="ProjectInstaller.cs">
       <SubType>Component</SubType>
     </Compile>

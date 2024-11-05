@@ -12,7 +12,7 @@ namespace _02_PingProcessInformationToWebsiteService.lib.services
     {
         private readonly ProcessTarget[] ProcessTargets;
 
-        ProcessMonitor(ProcessTarget[] processTargets)
+        public ProcessMonitor(ProcessTarget[] processTargets)
         {
             ProcessTargets = processTargets;
         }

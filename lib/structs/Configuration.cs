@@ -12,5 +12,8 @@ namespace _02_PingProcessInformationToWebsiteService.lib
 
         [JsonPropertyName("targets")]
         public ProcessTarget[] ProcessTargets { get; set; }
+
+        [JsonPropertyName("tick_interval")]
+        public int TickInterval { get; set; } // Time between two ticks of process information gathering
     }; 
 }

@@ -1,4 +1,6 @@
 ﻿using _02_PingProcessInformationToWebsiteService.lib;
+using _02_PingProcessInformationToWebsiteService.lib.services;
+using _02_PingProcessInformationToWebsiteService.lib.structs;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,16 +11,20 @@ using System.Linq;
 using System.ServiceProcess;
 using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
-
+using System.Timers;
 
 namespace _02_PingProcessInformationToWebsiteService
 {
     public partial class BaseService : ServiceBase
     {
+        Timer Timer = new Timer();
+
         private const string SERVICE_FOLDER = "saphalpdyl_portfolio";
         private const string DEFAULT_TARGET_URL = "https://saphalpdyl.com/";
+        private const int DEFAULT_INTERVAL = 1000;
+
         private Configuration Configuration;
+        private ProcessMonitor Monitor;
         
         public BaseService()
         {
@@ -68,6 +74,7 @@ namespace _02_PingProcessInformationToWebsiteService
                         ProcessTargets = ProcessTarget.DEFAULT_TARGETS,
                         TargetURL = DEFAULT_TARGET_URL,
                         AuthorizationSecret = "",
+                        TickInterval = DEFAULT_INTERVAL,
                     };
 
                     this.Configuration = defaultConfiguration;
@@ -94,6 +101,19 @@ namespace _02_PingProcessInformationToWebsiteService
         {
             InitializeServiceFoldersAndLogger();
             InitializeConfiguration();
+
+            Monitor = new ProcessMonitor(this.Configuration.ProcessTargets);
+
+            Timer.Elapsed += new ElapsedEventHandler(onTick);
+            Timer.Interval += this.Configuration.TickInterval;
+            Timer.Enabled = true;
+        }
+
+        private void onTick(object source, ElapsedEventArgs e)
+        {
+            // Handle the process information getting logic
+            ProcessTargetData[] processInformation = Monitor.GetProcessInformation();
+
         }
 
         protected override void OnStop()
