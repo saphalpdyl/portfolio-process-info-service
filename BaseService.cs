@@ -128,6 +128,9 @@ namespace _02_PingProcessInformationToWebsiteService
 
         private void OnTick(object source, ElapsedEventArgs e)
         {
+            try
+            {
+                
             // Handle the process information getting logic
             ProcessTargetData[] processInformation = Monitor.GetProcessInformation();
             server.SendProcessInformationToServer(processInformation, this.Configuration.AuthorizationSecret);
