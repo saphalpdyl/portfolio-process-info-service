@@ -43,7 +43,7 @@ namespace _02_PingProcessInformationToWebsiteService
 
         private void InitializeServiceFoldersAndLogger()
         {
-            string programFilesPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string programFilesPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
             string serviceFolderPath = Path.Combine(programFilesPath, SERVICE_FOLDER);
 
             string configFolderPath = Path.Combine(serviceFolderPath, "config");
@@ -65,7 +65,7 @@ namespace _02_PingProcessInformationToWebsiteService
         {
             try
             {
-                string programFilesPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                string programFilesPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
                 string serviceFolderPath = Path.Combine(programFilesPath, SERVICE_FOLDER);
                 string configFolderPath = Path.Combine(serviceFolderPath, "config");
 
@@ -130,10 +130,14 @@ namespace _02_PingProcessInformationToWebsiteService
         {
             try
             {
-                
-            // Handle the process information getting logic
-            ProcessTargetData[] processInformation = Monitor.GetProcessInformation();
-            server.SendProcessInformationToServer(processInformation, this.Configuration.AuthorizationSecret);
+                // Handle the process information getting logic
+                var processInformation = Monitor.GetProcessInformation();
+                _ = server.SendProcessInformationToServer(processInformation, this.Configuration.AuthorizationSecret);
+            }
+            catch
+            {
+                // ignored
+            }
         }
 
         protected override void OnStop()
